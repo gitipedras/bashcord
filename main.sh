@@ -1,86 +1,96 @@
-#!/bin/bash
+echo -e "\e[32m[API]\e[0m https://discordapi.com"
+echo -e "\e[32m[Session Host]\e[0m https://token.discordapi.com/?session.token=false"
+echo -e "\e[32m[Variable Host]\e[0m https://var.discordapi.com/?variables.txt"
 
-# Define available channels (modify as needed)
-channels=("general")
+read -p "Username:" username
+#read "Password:" password
 
-# Welcome message
-echo "Welcome to Discord!"
+#read -p "DISCORD (#:)> " com
+#echo "1"
 
-# Username prompt
-read -p "Enter Username: " username
+server=main
+channel=general
+deltext=+-+
 
-echo "Logging in as [$username]"
 
-# Action selection loop
-while true; do
-  # Clear previous output (optional)
-  clear
+read -p "Server:[main]" server
+if [[ $server = "" ]]; then
+  server=main
+  echo "[Server] https://servers.discordapi.com/main"
+fi
 
-  # Action menu
-  #echo "What would you like to do?"
-  watch -n 1 tail -n 10 general.txt
-  echo -----------------------
-  #echo "  1) View messages"
-  echo "  2) Reply"
-  echo "  3) Exit"
+echo "Create a channel (1) Select a channel (2)"
+read -p "Option #>" chop
 
-  # Read user choice
-  read -p "Enter your choice (1-3): " choice
+if [[ $chop = "1" ]]; then
+  echo "Create a channel"
+  read -p "Channel Name" chname
+  touch channels/$chname.txt
+  echo "Created channel $chname"
+  channel=$chname
+  echo "+-+ $channel +-+" >> channels/$channel.txt
 
-  case $choice in
-    1)  # View messages
-      # Channel selection loop
-      while true; do
-        clear
-        echo "Select a channel to view messages:"
-        select channel in "${channels[@]}"; do
-          if [[ -f "$channel.txt" ]]; then
-            # Display messages from the chosen file
-            clear
-            echo "Messages in #$channel:"
-            watch -n 1 tail -n 10 general.txt #cat "$channel.txt"
-            echo ""
-            break  # Exit channel selection loop
-          else
-            echo "That channel does not exist."
-          fi
-        done
+elif [[ $chop = "2" ]]; then
+  echo "/+/+/+/+/+/+/+/+/+/+/+/+/+/+/+/+/+/+/"
 
-        # Prompt to go back to main menu
-        read -p "Press Enter" exit_view
-        if [[ -z "$exit_view" ]]; then
-          break  # Exit channel selection loop
-        fi
-      done
-      ;;
-    2)  # Write message
-      #clear
-      #echo "Enter the channel to write to (general or tech):"
-      #read channel
+else
+  echo "Error: no such option"
 
-      channel="general"
+fi
 
-      if [[ ! " ${channels[@]} " =~ " $channel " ]]; then
-        echo "That channel does not exist."
-        continue  # Skip to next iteration of the main loop
-      fi
+read -p "Channel:[general]" channel
 
-      echo "Enter your message:"
-      read text
+if [[ $channel = "" ]]; then
+  channel=general
+  echo "Main > General"
+fi
+
+com=1
+
+
+case $com in
+  1)
+    while true; do
+
+      echo "Use C^ to go to chat"
+      watch -n 1 tail -n 10 channels/$channel.txt
+      #tail -f general.txt
+
+
+      #read -p "Press Enter" exit_view
+
+      read -p "Message $channel #>" text1
 
       # Construct final message
-      final_text="${username}:${text}"
+      final_text="${username}:${text1}"
 
       # Append message to channel file
-      echo "$final_text" >> "$channel.txt"
-      echo "Message sent to #$channel!"
-      ;;
-    3)  # Exit
-      echo "Goodbye!"
-      exit 0;
-      ;;
-      *)  # Update Messages
-      watch -n 1 tail -n 10 general.txt #cat "$channel.txt"
-        ;;
+      echo "$final_text" >> channels/$channel.txt
+
+    done
+  ;;
+
+  2)
+    read "Message @${channel} #>" text1
+
+    # Construct final message
+    final_text="${username}:${text1}"
+
+    # Append message to channel file
+    echo "$final_text" >> "$channel.txt"
+  ;;
+
+  3)  # Exit
+    echo "Goodbye!"
+    exit 0;
+    ;;
+
+  4)
+    echo "$deltext" > "general.txt"
+    ;;
+
+  *)  # Update Messages
+  watch -n 1 tail -n 10 general.txt
+    ;;
   esac
-done
+#done
