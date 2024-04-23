@@ -16,7 +16,6 @@ notify-send "Welcome to Bashcord!" "Happy to see you!"
 #}
 
 echo "Type cc to create an account and terms to view terms of service"
-echo "See API/up.txt for the username;password"
 echo "Press ENTER if quicksignin is installed and authenticated for this app"
 read -p "Username:" username
 if [[ $username = "ADMIN" ]]; then
@@ -72,8 +71,7 @@ echo "$username" >> appdata/online.txt
 read -s -p "Password for $username:" password
 if [ -e "quicksignin.key" ]; then
     echo " AUTHENTICATED WITH QUICKSIGNIN"
-    password=panda
-    
+    password=panda    
 fi
 check_password() {
     local username="$1"
@@ -150,9 +148,18 @@ case $com in
        echo "$channel_list" > appdata/channel-list.txt
        cat appdata/channel-list.txt | sed 's/\.txt//g' > appdata/channel-tmp.txt
        cat appdata/channel-tmp.txt
+      sleep 2
+       
+       elif [[ $text1 = "chm" ]]; then
+      
+       channel_list=$(ls "channels")
+       echo "$channel_list" > appdata/channel-list.txt
+       cat appdata/channel-list.txt | sed 's/\.txt//g' > appdata/channel-tmp.txt
+       cat appdata/channel-tmp.txt
        read -p "Enter Channel:" channel
        
        elif [[ $text1 = "chdel" ]]; then
+       
       
        channel_list=$(ls "channels")
        echo "$channel_list" > appdata/channel-list.txt
@@ -174,6 +181,16 @@ for protected_channel in "${protected_channels[@]}"; do
        rm channels/$chdeltodelete
     fi
 done
+
+	elif [[ $text1 = "admchdel" ]]; then
+      
+       channel_list=$(ls "channels")
+       echo "$channel_list" > appdata/channel-list.txt
+       cat appdata/channel-list.txt | sed 's/\.txt//g' > appdata/channel-tmp.txt
+       cat appdata/channel-tmp.txt
+       read -p "Enter channel to delete:" chdeltmp
+       chdeltodelete="$chdeltmp.txt"
+       rm channels/$chdeltodelete
 
        elif [[ $text1 = "chc" ]]; then
        	echo "$channel_list" > appdata/channel-list.txt
@@ -197,10 +214,10 @@ done
        echo "Channel Protection Disabled"
        
       fi
-       
       else
       final_text="${username}:${text1}"
       echo "$final_text" >> channels/$channel.txt
+      notify-send "BASHCORD" "$text1"
       fi
 
 
