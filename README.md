@@ -22,14 +22,14 @@ Change the variables under the if and else statements for the username and the p
 
 Make sure to keep the `quicksignin.key` file wich is just for the app to know that you want to sign in quickly.
 ## Commands
-For use in the chat
-`chc` > Creates a channel
-`chdel` > Deletes a channel
-`admchdel` > Deletes protected channels
-`qt`/`quit` > Exits the program
-`chl` > Lists channels
-`chm` > Changes channels
-`list` > Lists online users
+For use in the chat \
+`chc` > Creates a channel \
+`chdel` > Deletes a channel \
+`admchdel` > Deletes protected channels \
+`qt`/`quit` > Exits the program \
+`chl` > Lists channels \
+`chm` > Changes channels \
+`list` > Lists online users 
 
 ## Features
 - Create and delete channels
